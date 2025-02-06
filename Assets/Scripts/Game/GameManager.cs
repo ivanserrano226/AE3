@@ -42,7 +42,6 @@ public class GameManager : MonoBehaviour
     {
         while (_timeRemaining > 0 && !_isCountdownPaused)
         {
-            Debug.Log("Time Remaining: " + _timeRemaining);
             yield return new WaitForSeconds(1.0f);
             _timeRemaining--;
         }
