@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState { Ready, Countdown, Boss, Victory, Defeat }
 public class GameManager : MonoBehaviour
@@ -49,6 +50,14 @@ public class GameManager : MonoBehaviour
         if (_timeRemaining <= 0)
         {
             CurrentGameState = GameState.Boss;
+        }
+    }
+      void Update()
+    {
+        // Si se presiona la tecla ESC, volver al menú principal
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("MainMenu"); // Asegúrate de que "MainMenu" es el nombre de tu escena principal
         }
     }
 }
