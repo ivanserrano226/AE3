@@ -5,10 +5,13 @@ public enum GameState { Ready, Countdown, Boss, Victory, Defeat }
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public GameState CurrentGameState { get; private set; }
+
+    [SerializeField] private AudioClip _shootSound;
     private float _timeRemaining = 180.0f;
     private bool _isCountdownPaused = false;
     public float TimeRemaining => _timeRemaining;
+    public AudioClip ShootSound => _shootSound;
+    public GameState CurrentGameState { get; private set; }
 
     private void Awake()
     {
