@@ -67,6 +67,11 @@ public class GameManager : MonoBehaviour
                 ResumeGame();
             }
         }
+        // Si se presiona la tecla CTRL + ESC, regresar al menú principal
+        if(Input.GetKeyDown(KeyCode.LeftControl)&& isPaused)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
     public void ResumeGame()
