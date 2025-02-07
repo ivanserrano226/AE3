@@ -7,7 +7,19 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Game.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    guid: b193fe1bda1f22b4ab756240033f30ea
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 70ebb80df7a9741f9a38d7d952405018
+  - enabled: 1
+    path: Assets/Scenes/Options.unity
+    guid: 68ae8db0635ccea4a9213d943244827f
+  - enabled: 1
+    path: Assets/Scenes/WhoWeAre.unity
+    guid: 57b8611cd80b6824982cf892f707c543
+  - enabled: 1
+    path: Assets/Scenes/Audio.unity
+    guid: e89db987beaab7d4792a0f0c17e1fcf3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
