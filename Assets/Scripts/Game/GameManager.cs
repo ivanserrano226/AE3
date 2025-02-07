@@ -68,7 +68,22 @@ public class GameManager : MonoBehaviour
                 ResumeGame();
             }
         }
+<<<<<<< Updated upstream
     }
+=======
+        // Si se presiona la tecla CTRL , regresar al menú principal
+   if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
+    {
+       ReturnToMainMenu();
+    }}
+public void ReturnToMainMenu()
+{
+    Time.timeScale = 1f; // Asegurar que el juego no esté pausado
+    Cursor.lockState = CursorLockMode.None; // Liberar el cursor
+    Cursor.visible = true; // Hacer visible el cursor
+    SceneManager.LoadScene("MainMenu"); // Cargar el menú principal
+}
+>>>>>>> Stashed changes
 
     public void ResumeGame()
     {
