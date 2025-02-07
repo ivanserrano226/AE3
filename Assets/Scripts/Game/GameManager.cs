@@ -68,9 +68,6 @@ public class GameManager : MonoBehaviour
                 ResumeGame();
             }
         }
-<<<<<<< Updated upstream
-    }
-=======
         // Si se presiona la tecla CTRL , regresar al menú principal
    if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
     {
@@ -83,7 +80,6 @@ public void ReturnToMainMenu()
     Cursor.visible = true; // Hacer visible el cursor
     SceneManager.LoadScene("MainMenu"); // Cargar el menú principal
 }
->>>>>>> Stashed changes
 
     public void ResumeGame()
     {
