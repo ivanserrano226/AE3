@@ -105,6 +105,11 @@ public void ReturnToMainMenu()
     }
 
   
+public void AddTime(int extraTime)
+{
+    _timeRemaining += extraTime;
+    Debug.Log("Tiempo aumentado: " + extraTime + " segundos.");
+}
 
     
 }
