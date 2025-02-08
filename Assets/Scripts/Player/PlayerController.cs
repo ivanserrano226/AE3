@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private float _rotationSpeed = 15.0f;
     private float _verticalRotation = 0f;
     private bool _isShooting = false;
+     public int health = 100;
+    public float damageMultiplier = 1f;
 
     void Start()
     {
@@ -104,4 +107,40 @@ public class PlayerController : MonoBehaviour
         if (!IsGrounded()) return;
         _rb.AddForce(Vector3.up * 6.0f, ForceMode.Impulse);
     }
+    // 🎯 **Detectar la recolección de objetos**
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Pill"))
+        {
+            IncreaseHealth(50);
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Bomb"))
+        {
+            StartCoroutine(TemporaryDamageBoost(15f));
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Timer"))
+        {
+            GameManager.Instance.AddTime(20);
+            Destroy(other.gameObject);
+        }
+    }
+   // ✅ **Método para aumentar la vida**
+    public void IncreaseHealth(int amount)
+    {
+        health += amount;
+        Debug.Log("Vida aumentada: " + health);
+    }
+
+    // ✅ **Método para aumentar el daño temporalmente**
+    public IEnumerator TemporaryDamageBoost(float duration)
+    {
+        damageMultiplier = 2f;
+        Debug.Log("Daño aumentado por " + duration + " segundos.");
+        yield return new WaitForSeconds(duration);
+        damageMultiplier = 1f;
+        Debug.Log("El daño volvió a la normalidad.");
+    }
+    
 }

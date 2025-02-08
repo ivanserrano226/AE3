@@ -110,4 +110,10 @@ public class GameManager : MonoBehaviour
         GetComponent<AudioSource>().clip = newSong;
         GetComponent<AudioSource>().Play();
     }
+    public void AddTime(int extraTime)
+{
+    _timeRemaining += extraTime;
+    Debug.Log("Tiempo aumentado: " + extraTime + " segundos.");
+}
+
 }
