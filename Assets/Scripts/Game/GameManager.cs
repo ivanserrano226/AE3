@@ -1,20 +1,23 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum GameState { Ready, Countdown, Boss, Victory, Defeat }
+public enum GameState { Ready, Game, Victory, Defeat }
 public class GameManager : MonoBehaviour
 {
-     public static bool isPaused = false;
+    public static bool isPaused = false;
     public GameObject pauseMenuUI;
     public static GameManager Instance { get; private set; }
-
     [SerializeField] private AudioClip _shootSound;
+    [SerializeField] private AudioClip _bossMusic;
+
     private float _timeRemaining = 180.0f;
     private bool _isCountdownPaused = false;
     public float TimeRemaining => _timeRemaining;
     public AudioClip ShootSound => _shootSound;
     public GameState CurrentGameState { get; private set; }
+    public event Action OnCountdownFinished;
 
     private void Awake()
     {
@@ -30,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        CurrentGameState = GameState.Countdown;
+        CurrentGameState = GameState.Game;
         StartCoroutine(Countdown()); 
     }
 
@@ -53,7 +56,8 @@ public class GameManager : MonoBehaviour
         }
         if (_timeRemaining <= 0)
         {
-            CurrentGameState = GameState.Boss;
+            OnCountdownFinished?.Invoke();
+            ChangeSong(_bossMusic);
         }
     }
         void Update()
@@ -100,8 +104,10 @@ public class GameManager : MonoBehaviour
         isPaused = true;
         PauseCountdown();
     }
-
-  
-
     
+    public void ChangeSong(AudioClip newSong)
+    {
+        GetComponent<AudioSource>().clip = newSong;
+        GetComponent<AudioSource>().Play();
+    }
 }

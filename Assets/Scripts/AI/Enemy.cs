@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable
+public abstract class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] private GameObject _bloodPrefab;
     public void Damage(RaycastHit hit) 
