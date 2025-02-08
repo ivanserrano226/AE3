@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System;
+
 
 public class PlayerController : Entity
 {
@@ -8,7 +10,6 @@ public class PlayerController : Entity
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private Animator _animator;
-    
     [SerializeField] private Transform _gunTip;
     private float _movementSpeed = 10.0f;
     private float _fireRate = 0.3f;
@@ -16,6 +17,7 @@ public class PlayerController : Entity
     private float _rotationSpeed = 15.0f;
     private float _verticalRotation = 0f;
     private bool _isShooting = false;
+    public event Action<float> OnHealthChanged;
 
     void Start()
     {
@@ -79,7 +81,12 @@ public class PlayerController : Entity
     {
         _audioSource.PlayOneShot(GameManager.Instance.ShootSound, 0.5f);
 
+        
+
+
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0));
+
+        Debug.DrawRay(ray.origin, ray.direction, Color.red, 2.0f);
 
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
@@ -100,6 +107,19 @@ public class PlayerController : Entity
         // Check if there's a collider below the player
         return Physics.Raycast(origin, direction, 1.3f);
     }
+
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+        OnHealthChanged?.Invoke(Health);
+    }
+
+    public override void Heal(float amount)
+    {
+        base.Heal(amount);
+        OnHealthChanged?.Invoke(Health);
+    }
+
 
     void HandleJump() 
     {

@@ -11,13 +11,14 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     [SerializeField] private AudioClip _shootSound;
     [SerializeField] private AudioClip _bossMusic;
-
     private float _timeRemaining = 180.0f;
     private bool _isCountdownPaused = false;
     public float TimeRemaining => _timeRemaining;
     public AudioClip ShootSound => _shootSound;
     public GameState CurrentGameState { get; private set; }
+    public int EnemyCount { get; private set; }
     public event Action OnCountdownFinished;
+    public event Action OnEnemyKilledEvent;
 
     private void Awake()
     {
@@ -61,25 +62,25 @@ public class GameManager : MonoBehaviour
         }
     }
         void Update()
-    {
-        // Si se presiona la tecla ESC, pausar o reanudar el juego
-        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!isPaused)
+            // Si se presiona la tecla ESC, pausar o reanudar el juego
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                PauseGame();
+                if (!isPaused)
+                {
+                    //PauseGame();
+                }
+                else
+                {
+                    //ResumeGame();
+                }
             }
-            else
+            // Si se presiona la tecla CTRL + ESC, regresar al menú principal
+            if(Input.GetKeyDown(KeyCode.LeftControl)&& isPaused)
             {
-                ResumeGame();
+                SceneManager.LoadScene("MainMenu");
             }
         }
-        // Si se presiona la tecla CTRL + ESC, regresar al menú principal
-        if(Input.GetKeyDown(KeyCode.LeftControl)&& isPaused)
-        {
-            SceneManager.LoadScene("MainMenu");
-        }
-    }
 
     public void ResumeGame()
     {
@@ -109,5 +110,10 @@ public class GameManager : MonoBehaviour
     {
         GetComponent<AudioSource>().clip = newSong;
         GetComponent<AudioSource>().Play();
+    }
+    public void OnEnemyKilled()
+    {
+        EnemyCount++;
+        OnEnemyKilledEvent?.Invoke();
     }
 }
