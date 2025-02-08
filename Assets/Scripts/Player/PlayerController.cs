@@ -126,14 +126,14 @@ public class PlayerController : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
-   // ✅ **Método para aumentar la vida**
+   //Método para aumentar la vida**
     public void IncreaseHealth(int amount)
     {
         health += amount;
         Debug.Log("Vida aumentada: " + health);
     }
 
-    // ✅ **Método para aumentar el daño temporalmente**
+    // Método para aumentar el daño temporalmente**
     public IEnumerator TemporaryDamageBoost(float duration)
     {
         damageMultiplier = 2f;
