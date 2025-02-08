@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour, IDamageable
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private GameObject _bloodPrefab;
+    public void Damage(RaycastHit hit) 
     {
-        
-    }
+        // Instantiate the particle system at the hit point
+        GameObject particle = Instantiate(_bloodPrefab, hit.point, Quaternion.identity);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Fix the rotation so the particle system aligns with the surface normal
+        particle.transform.rotation = Quaternion.LookRotation(hit.normal);
+
+        Destroy(particle, 0.3f);
     }
 }

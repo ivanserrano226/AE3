@@ -1,17 +1,23 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum GameState { Ready, Countdown, Boss, Victory, Defeat }
+public enum GameState { Ready, Game, Victory, Defeat }
 public class GameManager : MonoBehaviour
 {
-     public static bool isPaused = false;
+    public static bool isPaused = false;
     public GameObject pauseMenuUI;
     public static GameManager Instance { get; private set; }
-    public GameState CurrentGameState { get; private set; }
+    [SerializeField] private AudioClip _shootSound;
+    [SerializeField] private AudioClip _bossMusic;
+
     private float _timeRemaining = 180.0f;
     private bool _isCountdownPaused = false;
     public float TimeRemaining => _timeRemaining;
+    public AudioClip ShootSound => _shootSound;
+    public GameState CurrentGameState { get; private set; }
+    public event Action OnCountdownFinished;
 
     private void Awake()
     {
@@ -27,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        CurrentGameState = GameState.Countdown;
+        CurrentGameState = GameState.Game;
         StartCoroutine(Countdown()); 
     }
 
@@ -50,7 +56,8 @@ public class GameManager : MonoBehaviour
         }
         if (_timeRemaining <= 0)
         {
-            CurrentGameState = GameState.Boss;
+            OnCountdownFinished?.Invoke();
+            ChangeSong(_bossMusic);
         }
     }
         void Update()
@@ -67,18 +74,12 @@ public class GameManager : MonoBehaviour
                 ResumeGame();
             }
         }
-        // Si se presiona la tecla CTRL , regresar al menú principal
-   if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
-    {
-       ReturnToMainMenu();
-    }}
-public void ReturnToMainMenu()
-{
-    Time.timeScale = 1f; // Asegurar que el juego no esté pausado
-    Cursor.lockState = CursorLockMode.None; // Liberar el cursor
-    Cursor.visible = true; // Hacer visible el cursor
-    SceneManager.LoadScene("MainMenu"); // Cargar el menú principal
-}
+        // Si se presiona la tecla CTRL + ESC, regresar al menú principal
+        if(Input.GetKeyDown(KeyCode.LeftControl)&& isPaused)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+    }
 
     public void ResumeGame()
     {
@@ -103,13 +104,10 @@ public void ReturnToMainMenu()
         isPaused = true;
         PauseCountdown();
     }
-
-  
-public void AddTime(int extraTime)
-{
-    _timeRemaining += extraTime;
-    Debug.Log("Tiempo aumentado: " + extraTime + " segundos.");
-}
-
     
+    public void ChangeSong(AudioClip newSong)
+    {
+        GetComponent<AudioSource>().clip = newSong;
+        GetComponent<AudioSource>().Play();
+    }
 }
