@@ -1,14 +1,11 @@
-using UnityEngine;
 
 public class TimeItem : Item
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
+        // Inicialización específica si es necesario
     }
 
-    // Update is called once per frame
     protected override void Update()
     {
         base.Update();
@@ -16,6 +13,10 @@ public class TimeItem : Item
 
     public override void Use()
     {
-
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.AddTime(20);
+        }
+        Destroy(gameObject);
     }
 }

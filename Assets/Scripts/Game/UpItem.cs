@@ -1,14 +1,12 @@
-using UnityEngine;
 
-public class UpItem : Item
+
+public class DamageItem : Item
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
+        // Inicialización específica si es necesario
     }
 
-    // Update is called once per frame
     protected override void Update()
     {
         base.Update();
@@ -16,6 +14,13 @@ public class UpItem : Item
 
     public override void Use()
     {
-
+        PlayerController player = FindFirstObjectByType<PlayerController>();
+        if (player != null)
+        {
+            StartCoroutine(player.TemporaryDamageBoost(15f));
+        }
+        Destroy(gameObject);
     }
+
+
 }

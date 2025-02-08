@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2670530186044013962}
   - component: {fileID: 1247550234487117254}
   - component: {fileID: 5643153100767122869}
-  - component: {fileID: -8310067751324257926}
+  - component: {fileID: 4484883019119642507}
   m_Layer: 0
   m_Name: HP
   m_TagString: Untagged
@@ -110,7 +110,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2.99
   m_Center: {x: 0.00000011920929, y: -0.0038284063, z: 0}
---- !u!114 &-8310067751324257926
+--- !u!114 &4484883019119642507
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

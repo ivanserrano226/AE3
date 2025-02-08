@@ -1,14 +1,12 @@
 using UnityEngine;
 
-public class HPItem : Item
+public class HP : Item
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
+        // Inicialización específica si es necesario
     }
 
-    // Update is called once per frame
     protected override void Update()
     {
         base.Update();
@@ -16,6 +14,11 @@ public class HPItem : Item
 
     public override void Use()
     {
-
+        PlayerController player = FindAnyObjectByType<PlayerController>();
+        if (player != null)
+        {
+            player.IncreaseHealth(50);
+        }
+        Destroy(gameObject);
     }
 }

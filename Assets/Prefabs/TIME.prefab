@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3284979638517501631}
   - component: {fileID: 5393426125562379721}
   - component: {fileID: 5280420377363243578}
-  - component: {fileID: -6736705130783989355}
+  - component: {fileID: 571381523076941879}
   m_Layer: 0
   m_Name: TIME
   m_TagString: Untagged
@@ -110,7 +110,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3.02
   m_Center: {x: 0, y: 0.011353552, z: 0}
---- !u!114 &-6736705130783989355
+--- !u!114 &571381523076941879
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
