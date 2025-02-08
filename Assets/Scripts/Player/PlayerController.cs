@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Entity
 {
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private PlayerInput _playerInput;
@@ -82,10 +83,12 @@ public class PlayerController : MonoBehaviour
 
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
-            // Check if the hit object implements IDamageable
-            IDamageable damageable = hit.transform.GetComponent<IDamageable>();
-
-            if(damageable != null ) damageable.Damage(hit);
+            Enemy enemy = hit.transform.GetComponent<Enemy>();
+            if(enemy != null )
+            {
+                enemy.SpawnDamageParticle(hit);
+                enemy.TakeDamage(10);
+            } 
         }
     }
 
@@ -104,4 +107,10 @@ public class PlayerController : MonoBehaviour
         if (!IsGrounded()) return;
         _rb.AddForce(Vector3.up * 6.0f, ForceMode.Impulse);
     }
+
+    protected override void Die()
+    {
+        SceneManager.LoadScene(1);
+    }
+
 }

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7863884333609643643}
   - component: {fileID: 7665775715253891483}
   - component: {fileID: 2292683993441756742}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -132,6 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d65415705624a5ab77ae52d5ca24bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: 0
+  _damage: 0
   _rb: {fileID: 6446302030458029772}
   _playerInput: {fileID: 2292683993441756742}
   _audioSource: {fileID: 6826031601269908194}
@@ -274,7 +276,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 951
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
