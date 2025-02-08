@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class HPItem : Item
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -9,8 +9,13 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        
+        base.Update();
+    }
+
+    public override void Use()
+    {
+
     }
 }
