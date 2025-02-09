@@ -1,14 +1,16 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using System;
 
-public class PlayerController : MonoBehaviour
+
+public class PlayerController : Entity
 {
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private Animator _animator;
-    
     [SerializeField] private Transform _gunTip;
     private float _movementSpeed = 10.0f;
     private float _fireRate = 0.3f;
@@ -16,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private float _rotationSpeed = 15.0f;
     private float _verticalRotation = 0f;
     private bool _isShooting = false;
+    public event Action<float> OnHealthChanged;
      public int health = 100;
     public float damageMultiplier = 1f;
 
@@ -81,14 +84,21 @@ public class PlayerController : MonoBehaviour
     {
         _audioSource.PlayOneShot(GameManager.Instance.ShootSound, 0.5f);
 
+        
+
+
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0));
+
+        Debug.DrawRay(ray.origin, ray.direction, Color.red, 2.0f);
 
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
-            // Check if the hit object implements IDamageable
-            IDamageable damageable = hit.transform.GetComponent<IDamageable>();
-
-            if(damageable != null ) damageable.Damage(hit);
+            Enemy enemy = hit.transform.GetComponent<Enemy>();
+            if(enemy != null )
+            {
+                enemy.SpawnDamageParticle(hit);
+                enemy.TakeDamage(10);
+            } 
         }
     }
 
@@ -101,12 +111,31 @@ public class PlayerController : MonoBehaviour
         return Physics.Raycast(origin, direction, 1.3f);
     }
 
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+        OnHealthChanged?.Invoke(Health);
+    }
+
+    public override void Heal(float amount)
+    {
+        base.Heal(amount);
+        OnHealthChanged?.Invoke(Health);
+    }
+
+
     void HandleJump() 
     {
         
         if (!IsGrounded()) return;
         _rb.AddForce(Vector3.up * 6.0f, ForceMode.Impulse);
     }
+
+    protected override void Die()
+    {
+        SceneManager.LoadScene(1);
+    }
+
     // 🎯 **Detectar la recolección de objetos**
     private void OnTriggerEnter(Collider other)
     {
