@@ -1,7 +1,13 @@
-using Game.Items;
 using UnityEngine;
 
-public class HPItem : Item
+namespace Game.Items
+{
+    public abstract class Item : MonoBehaviour
+    {
+        public abstract void Use(PlayerController player);
+    }
+
+    public class HPItem : Item
     {
         public override void Use(PlayerController player)
         {
@@ -13,3 +19,7 @@ public class HPItem : Item
             Destroy(gameObject);
         }
     }
+
+   
+  
+}

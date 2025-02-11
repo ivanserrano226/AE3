@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3284979638517501631}
   - component: {fileID: 5393426125562379721}
   - component: {fileID: 5280420377363243578}
-  - component: {fileID: 571381523076941879}
+  - component: {fileID: 5323470806987649619}
   m_Layer: 0
   m_Name: TIME
   m_TagString: Untagged
@@ -110,7 +110,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3.02
   m_Center: {x: 0, y: 0.011353552, z: 0}
---- !u!114 &571381523076941879
+--- !u!114 &5323470806987649619
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2422613761464251827}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a02b7572e266da346a29096883255a55, type: 3}
+  m_Script: {fileID: 11500000, guid: 302f0331fd619ea489acc2a059442b81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &5022603413486473361

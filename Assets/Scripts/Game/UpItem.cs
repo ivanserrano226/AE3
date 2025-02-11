@@ -1,26 +1,15 @@
+using Game.Items;
+using UnityEngine;
 
-
-public class DamageItem : Item
-{
-    private void Start()
+public class UpItem : Item
     {
-        // Inicialización específica si es necesario
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-    }
-
-    public override void Use()
-    {
-        PlayerController player = FindFirstObjectByType<PlayerController>();
-        if (player != null)
+        public override void Use(PlayerController player)
         {
-            StartCoroutine(player.TemporaryDamageBoost(15f));
+            if (player != null)
+            {
+                player.StartCoroutine(player.TemporaryDamageBoost(15f));
+                Debug.Log("Poder aumentado por 15 segundos");
+            }
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
     }
-
-
-}
