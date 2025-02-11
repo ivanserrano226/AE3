@@ -15,6 +15,7 @@ public class Enemy : Entity
     private EnemyState _state;
     private GameObject _player;
     private bool isAttacking = false;
+    private Coroutine attackCoroutine;
 
     private void Start()
     {
@@ -25,6 +26,7 @@ public class Enemy : Entity
 
     void Update()
     {
+        if (_state == EnemyState.Dead) return;
         HandleState();
     }
 
@@ -48,7 +50,10 @@ public class Enemy : Entity
 
             case EnemyState.Attacking:
                 _animator.SetBool("isMoving", false);
-                if (!isAttacking) StartCoroutine(AttackCoroutine());
+                if (!isAttacking) 
+                {
+                    attackCoroutine = StartCoroutine(AttackCoroutine());
+                }
                 break;
 
             case EnemyState.Dead: 
@@ -64,25 +69,25 @@ public class Enemy : Entity
         _audioSource.PlayOneShot(_enemyAttackSound);
         _animator.SetTrigger("attack");
         
-        yield return new WaitForSeconds(0.5f); // Wait for animation to reach damage frame
-        _player.GetComponent<Entity>().TakeDamage(Damage);
+        yield return new WaitForSeconds(0.5f);
 
-        yield return new WaitForSeconds(1f); // Attack cooldown
+        if (_state != EnemyState.Dead)
+        {
+            _player.GetComponent<Entity>().TakeDamage(Damage);
+        }
+
+        yield return new WaitForSeconds(1f);
         isAttacking = false;
         
-        ChangeState(EnemyState.Chasing); // Resume chasing after attack
+        if (_state != EnemyState.Dead)
+        {
+            ChangeState(EnemyState.Chasing);
+        }
     }
 
     private void ChangeState(EnemyState newState)
     {
         _state = newState;
-    }
-
-    public override void TakeDamage(float damage)
-    {
-        GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + 50.0f * Time.deltaTime * -transform.forward);
-        _animator.SetTrigger("hit");
-        base.TakeDamage(damage);
     }
 
     protected override void Die()
@@ -92,27 +97,26 @@ public class Enemy : Entity
 
     private IEnumerator DieCoroutine()
     {
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+        
         ChangeState(EnemyState.Dead);
-        GetComponent<Collider>().enabled = false;
+        _agent.isStopped = true;
+        GetComponent<CapsuleCollider>().enabled = false;
         GameManager.Instance.OnEnemyKilled();
         _audioSource.PlayOneShot(_enemyDeathSound);
         _animator.SetTrigger("dead");
         yield return new WaitForSeconds(3f);
-
-        Destroy(gameObject, 10f);
+        Destroy(gameObject);
     }
 
     public virtual void SpawnDamageParticle(RaycastHit hit) 
     {
-        // Instantiate the particle system at the hit point
         GameObject particle = Instantiate(_bloodPrefab, hit.point, Quaternion.identity);
-
-        // Fix the rotation so the particle system aligns with the surface normal
         particle.transform.rotation = Quaternion.LookRotation(hit.normal);
-
-        //Scale the prefab depending on the hit object's scale
-        particle.transform.localScale = hit.transform.localScale;
-
         Destroy(particle, 0.3f);
     }
 }

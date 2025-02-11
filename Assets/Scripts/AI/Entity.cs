@@ -5,13 +5,12 @@ public abstract class Entity : MonoBehaviour
     [SerializeField] private float _health;
     [SerializeField] private float _maxHealth;
     [SerializeField] private float _damage;
-    public float Health { get => _health; }
-    public float Damage { get => _damage; }
-    public float MaxHealth { get => _maxHealth; }
+    public float Health { get => _health; protected set => _health = value; }
+    public float Damage { get => _damage; protected set => _damage = value; }
+    public float MaxHealth { get => _maxHealth; protected set => _maxHealth = value; }
     protected abstract void Die();
     public virtual void TakeDamage(float damage)
     {
-        Debug.Log("Entity taking damage");
         _health -= damage;
         if (_health <= 0)
         {

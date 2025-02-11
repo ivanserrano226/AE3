@@ -2,11 +2,6 @@ using UnityEngine;
 
 public class HPItem : Item
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     protected override void Update()
@@ -16,6 +11,6 @@ public class HPItem : Item
 
     public override void Use()
     {
-
+        GameManager.Instance.Player.Heal(25);
     }
 }

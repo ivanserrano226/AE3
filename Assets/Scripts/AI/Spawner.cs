@@ -13,7 +13,7 @@ public abstract class Spawner : MonoBehaviour
     
     protected virtual void Spawn(Vector3 position, Quaternion rotation)
     {
-        // Check if a prefab is already spawned at the position
+        // Comprobar si ya hay un prefab en la posición
         Collider[] colliders = Physics.OverlapSphere(position, 1.0f);
         foreach (Collider collider in colliders)
         {
@@ -25,11 +25,9 @@ public abstract class Spawner : MonoBehaviour
 
 
 
-        // Choose a random prefab to spawn
         int randomIndex = Random.Range(0, _spawnPrefabs.Count);
         GameObject _spawnPrefab = _spawnPrefabs[randomIndex];
 
-        // Instantiate the prefab at the position and rotation
         _lastSpawnedPrefab = Instantiate(_spawnPrefab, position, rotation);
     }
 }
