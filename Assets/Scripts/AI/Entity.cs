@@ -11,6 +11,7 @@ public abstract class Entity : MonoBehaviour
     protected abstract void Die();
     public virtual void TakeDamage(float damage)
     {
+        Debug.Log("Entity taking damage");
         _health -= damage;
         if (_health <= 0)
         {

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
+    [SerializeField] private AudioClip _pickupSound;
     public abstract void Use();
 
     protected virtual void Update()
@@ -14,9 +15,9 @@ public abstract class Item : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            GameManager.Instance.PlaySound(_pickupSound);
             // Add powerup to player
             Use();
-            
             // Destroy the item
             Destroy(gameObject);
         }

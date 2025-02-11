@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75237301a5f28484a93856a2c9e6118c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _pickupSound: {fileID: 8300000, guid: 53b3ac3e2478e437ea06485e505fad65, type: 3}
 --- !u!1001 &1455077995008117214
 PrefabInstance:
   m_ObjectHideFlags: 0

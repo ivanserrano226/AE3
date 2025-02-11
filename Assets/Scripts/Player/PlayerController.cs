@@ -81,9 +81,6 @@ public class PlayerController : Entity
     {
         _audioSource.PlayOneShot(GameManager.Instance.ShootSound, 0.5f);
 
-        
-
-
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0));
 
         Debug.DrawRay(ray.origin, ray.direction, Color.red, 2.0f);

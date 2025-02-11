@@ -82,6 +82,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
+    public void PlaySound(AudioClip clip)
+    {
+        GetComponent<AudioSource>().PlayOneShot(clip);
+    }
     public void ResumeGame()
     {
         if (pauseMenuUI != null)
