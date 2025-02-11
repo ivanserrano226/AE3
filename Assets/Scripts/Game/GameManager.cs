@@ -1,24 +1,26 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public enum GameState { Ready, Game, Victory, Defeat }
+public enum GameState { Game, Victory, Defeat }
 public enum GameOverStatus {Victory, Defeat}
 public class GameManager : MonoBehaviour
 {
-    public static bool isPaused = false;
     public GameObject pauseMenuUI;
     public static GameManager Instance { get; private set; }
+    private PlayerController _player;
     [SerializeField] private AudioClip _shootSound;
-    [SerializeField] private AudioClip _bossMusic;
-    private float _timeRemaining = 180.0f;
+    [SerializeField] private AudioClip _loseSound;
+    [SerializeField] private AudioClip _winSound;
+    private float _timeRemaining = 120.0f;
     private bool _isCountdownPaused = false;
     public float TimeRemaining => _timeRemaining;
     public AudioClip ShootSound => _shootSound;
     public GameState CurrentGameState { get; private set; }
     public int EnemyCount { get; private set; }
-    public event Action OnCountdownFinishedEvent;
+    public PlayerController Player => _player;
+    public event Action<bool> OnGamePausedEvent;
+    public event Action OnPlayerSpawnedEvent;
     public event Action OnEnemyKilledEvent;
     public event Action<GameOverStatus> OnGameOverEvent;
 
@@ -40,16 +42,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(Countdown()); 
     }
 
-    public void PauseCountdown()
-    {
-        _isCountdownPaused = true;
-    }
-
-    public void ResumeCountdown()
-    {
-        _isCountdownPaused = false;
-    }
-
     IEnumerator Countdown()
     {
         while (_timeRemaining > 0 && !_isCountdownPaused)
@@ -59,63 +51,54 @@ public class GameManager : MonoBehaviour
         }
         if (_timeRemaining <= 0)
         {
-            OnCountdownFinishedEvent?.Invoke();
-            ChangeSong(_bossMusic);
+            OnGameOver(GameOverStatus.Victory);
         }
     }
-        void Update()
-        {
-            // Si se presiona la tecla ESC, pausar o reanudar el juego
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                if (!isPaused)
-                {
-                    //PauseGame();
-                }
-                else
-                {
-                    //ResumeGame();
-                }
-            }
-            // Si se presiona la tecla CTRL + ESC, regresar al menú principal
-            if(Input.GetKeyDown(KeyCode.LeftControl)&& isPaused)
-            {
-                SceneManager.LoadScene("MainMenu");
-            }
-        }
 
     public void PlaySound(AudioClip clip)
     {
-        GetComponent<AudioSource>().PlayOneShot(clip);
+        GetComponent<AudioSource>().PlayOneShot(clip, 0.4f);
     }
     public void ResumeGame()
     {
-        if (pauseMenuUI != null)
-        {
-            pauseMenuUI.SetActive(false);
-        }
-
         Time.timeScale = 1f;
-        isPaused = false;
-        ResumeCountdown();
+        OnGamePausedEvent?.Invoke(false);
     }
 
     public void PauseGame()
     {
-        if (pauseMenuUI != null)
-        {
-            pauseMenuUI.SetActive(true);
-        }
-
         Time.timeScale = 0f;
-        isPaused = true;
-        PauseCountdown();
+        OnGamePausedEvent?.Invoke(true);
     }
-    
-    public void ChangeSong(AudioClip newSong)
+
+    public void TogglePause()
     {
-        GetComponent<AudioSource>().clip = newSong;
-        GetComponent<AudioSource>().Play();
+        if (Time.timeScale == 0f)
+        {
+             ResumeGame();
+        }
+        else
+        {
+            PauseGame();
+        }
+    }
+
+    public void ReturnToMenu()
+    {
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.None;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+
+    public void AddTime(float time)
+    {
+        _timeRemaining += time;
+    }
+
+    public void OnPlayerSpawned(PlayerController player)
+    {
+        _player = player;
+        OnPlayerSpawnedEvent?.Invoke();
     }
     public void OnEnemyKilled()
     {
@@ -125,8 +108,19 @@ public class GameManager : MonoBehaviour
 
     public void OnGameOver(GameOverStatus gameOverStatus)
     {
+        GetComponent<AudioSource>().Stop();
+        if (gameOverStatus == GameOverStatus.Victory)
+        {
+            PlaySound(_winSound);
+            CurrentGameState = GameState.Victory;
+        }
+        else
+        {
+            PlaySound(_loseSound);
+            CurrentGameState = GameState.Defeat;
+        }
         OnGameOverEvent?.Invoke(gameOverStatus);
-        PauseGame();
+        Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
     }
 }

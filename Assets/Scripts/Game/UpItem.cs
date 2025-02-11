@@ -1,14 +1,5 @@
-using UnityEngine;
-
 public class UpItem : Item
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     protected override void Update()
     {
         base.Update();
@@ -16,6 +7,6 @@ public class UpItem : Item
 
     public override void Use()
     {
-
+        GameManager.Instance.Player.DamagePowerUp();
     }
 }

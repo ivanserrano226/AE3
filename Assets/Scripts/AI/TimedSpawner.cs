@@ -12,12 +12,10 @@ public class TimedSpawner : Spawner
 
     protected virtual void Update() 
     {
-        // Check if it's time to spawn an enemy
         if (Time.time >= _nextSpawnTime)
         {
             _nextSpawnTime = Time.time + _spawnRate;
             Spawn();
         }
-
     }
 }

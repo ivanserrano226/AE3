@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using System;
-
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : Entity
 {
@@ -21,11 +21,48 @@ public class PlayerController : Entity
 
     void Start()
     {
+        GameManager.Instance.OnPlayerSpawned(this);
         Cursor.lockState = CursorLockMode.Locked;
+    }
 
-        _playerInput.actions["Jump"].performed += ctx => HandleJump();
-        _playerInput.actions["Attack"].performed += ctx =>_isShooting = true;
-        _playerInput.actions["Attack"].canceled += ctx => _isShooting = false;
+    void OnEnable()
+    {
+        _playerInput.actions["Jump"].performed += OnJumpPerformed;
+        _playerInput.actions["Attack"].performed += OnAttackPerformed;
+        _playerInput.actions["Attack"].canceled += OnAttackCanceled;
+        _playerInput.actions["Pause"].performed += OnPausePerformed;
+        GameManager.Instance.OnGamePausedEvent += OnGamePaused;
+        GameManager.Instance.OnGameOverEvent += OnGameOver;
+    }
+
+    void OnDisable()
+    {
+        _playerInput.actions["Jump"].performed -= OnJumpPerformed;
+        _playerInput.actions["Attack"].performed -= OnAttackPerformed;
+        _playerInput.actions["Attack"].canceled -= OnAttackCanceled;
+        _playerInput.actions["Pause"].performed -= OnPausePerformed;
+        GameManager.Instance.OnGamePausedEvent -= OnGamePaused;
+        GameManager.Instance.OnGameOverEvent -= OnGameOver;
+    }
+
+    private void OnJumpPerformed(InputAction.CallbackContext context)
+    {
+        HandleJump();
+    }
+
+    private void OnAttackPerformed(InputAction.CallbackContext context)
+    {
+        _isShooting = true;
+    }
+
+    private void OnAttackCanceled(InputAction.CallbackContext context)
+    {
+        _isShooting = false;
+    }
+
+    private void OnPausePerformed(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.TogglePause();
     }
 
     void Update()
@@ -46,32 +83,27 @@ public class PlayerController : Entity
 
     void HandleMovement() 
     {
-        // Get the movement input
         Vector2 movementInput = _playerInput.actions["Move"].ReadValue<Vector2>();
 
-        // Convert to world-space movement relative to player rotation
         Vector3 movementDirection = transform.forward * movementInput.y + transform.right * movementInput.x;
 
-        // Apply movement (ensuring it's physics-friendly)
         Vector3 movementVelocity = movementDirection.normalized * _movementSpeed;
 
-        _rb.linearVelocity = new Vector3(movementVelocity.x, _rb.linearVelocity.y, movementVelocity.z); // Keeps gravity intact
+        _rb.linearVelocity = new Vector3(movementVelocity.x, _rb.linearVelocity.y, movementVelocity.z);
 
     }
 
     void HandleRotation() 
     {
-        // Get the mouse movement input
         Vector2 mouseDelta = _playerInput.actions["Look"].ReadValue<Vector2>();
 
-        // Get the current rotation
         Quaternion currentRotation = _rb.rotation;
 
         Quaternion yawRotation = Quaternion.Euler(0f, mouseDelta.x * _rotationSpeed * Time.deltaTime, 0f);
         _rb.MoveRotation(currentRotation * yawRotation);
 
         _verticalRotation -= mouseDelta.y * _rotationSpeed * Time.deltaTime;
-        _verticalRotation = Mathf.Clamp(_verticalRotation, -89f, 89f); // Prevents looking too far up/down
+        _verticalRotation = Mathf.Clamp(_verticalRotation, -89f, 89f);
 
         Camera.main.transform.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
 
@@ -79,19 +111,18 @@ public class PlayerController : Entity
 
     void Shoot() 
     {
-        _audioSource.PlayOneShot(GameManager.Instance.ShootSound, 0.5f);
+        _audioSource.PlayOneShot(GameManager.Instance.ShootSound, 0.3f);
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0));
 
-        Debug.DrawRay(ray.origin, ray.direction, Color.red, 2.0f);
+        int layerMask = ~LayerMask.GetMask("Walls");
 
-        if(Physics.Raycast(ray, out RaycastHit hit))
+        if(Physics.Raycast(ray, out RaycastHit hit, 100, layerMask))
         {
-            Enemy enemy = hit.transform.GetComponent<Enemy>();
-            if(enemy != null )
+            if(hit.transform.TryGetComponent<Enemy>(out var enemy))
             {
                 enemy.SpawnDamageParticle(hit);
-                enemy.TakeDamage(10);
+                enemy.TakeDamage(Damage);
             } 
         }
     }
@@ -101,7 +132,6 @@ public class PlayerController : Entity
         Vector3 origin = transform.position;
         Vector3 direction = Vector3.down;
 
-        // Check if there's a collider below the player
         return Physics.Raycast(origin, direction, 1.3f);
     }
 
@@ -117,10 +147,37 @@ public class PlayerController : Entity
         OnHealthChanged?.Invoke(Health);
     }
 
+    public void DamagePowerUp()
+    {
+        StartCoroutine(PowerUpRoutine());
+    }
+
+    private IEnumerator PowerUpRoutine()
+    {
+        Damage = 50;
+        yield return new WaitForSeconds(5.0f);
+        Damage = 20;
+    }
+
+    private void OnGamePaused(bool isPaused)
+    {
+        if (isPaused) _playerInput.actions["Menu"].performed += OnMenuKeyPressed;
+        else _playerInput.actions["Menu"].performed -= OnMenuKeyPressed;
+    }
+
+    private void OnGameOver(GameOverStatus status)
+    {
+        _playerInput.enabled = false;
+    }
+
+    private void OnMenuKeyPressed(InputAction.CallbackContext ctx)
+    {
+        _playerInput.actions["Menu"].performed -= OnMenuKeyPressed;
+        GameManager.Instance.ReturnToMenu();
+    }
 
     void HandleJump() 
     {
-        
         if (!IsGrounded()) return;
         _rb.AddForce(Vector3.up * 6.0f, ForceMode.Impulse);
     }

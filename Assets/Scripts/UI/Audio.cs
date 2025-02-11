@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class AudioSettingsMenu : MonoBehaviour
 {
+    [SerializeField] private AudioListener _audioListener;
     public Button audioOnButton;
     public Button audioOffButton;
     
