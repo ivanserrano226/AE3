@@ -830,7 +830,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4065568553791171089}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 631ce73db9a2846058accca35315650a, type: 3}
+  m_Script: {fileID: 11500000, guid: 8aef3603a40b74c61ab884ffc4cd18e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
@@ -841,7 +841,7 @@ MonoBehaviour:
   _animator: {fileID: 7625076449385279912}
   _bloodPrefab: {fileID: 1000013355911406, guid: d32aa916f50cac94db11e6f19821a58f, type: 3}
   _enemyAttackSound: {fileID: 8300000, guid: f1ff3e33006a291449618f6fc613e928, type: 3}
-  _enemyDeathSound: {fileID: 8300000, guid: 9df77b70cadc8384ca073a95aebc666f, type: 3}
+  _enemyDeathSound: {fileID: 8300000, guid: 1d92c5ac0e056b045b4461b147f95be5, type: 3}
 --- !u!136 &1958605943941061985
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -36270,7 +36270,7 @@ GameObject:
   - component: {fileID: 856062378}
   - component: {fileID: 856062379}
   m_Layer: 0
-  m_Name: MutantSpawner
+  m_Name: ZombieSpawner3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36298,13 +36298,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856062377}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa504c10c38ee0d44974f501c9c1a6e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPrefabs:
-  - {fileID: 6417186282653832102, guid: c6d87ecda2cd64ffabf3950c41a08e4b, type: 3}
+  - {fileID: 4065568553791171089, guid: ddf4b0022fbab4043a370f34f3ff59ee, type: 3}
   _spawnRate: 15
 --- !u!1001 &858008752
 PrefabInstance:
@@ -50700,7 +50700,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170996884}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa504c10c38ee0d44974f501c9c1a6e2, type: 3}
   m_Name: 
@@ -81651,7 +81651,7 @@ GameObject:
   - component: {fileID: 1959588301}
   - component: {fileID: 1959588302}
   m_Layer: 0
-  m_Name: MutantSpawner2
+  m_Name: ZombieSpawner4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81679,13 +81679,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1959588300}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa504c10c38ee0d44974f501c9c1a6e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPrefabs:
-  - {fileID: 6417186282653832102, guid: c6d87ecda2cd64ffabf3950c41a08e4b, type: 3}
+  - {fileID: 4065568553791171089, guid: ddf4b0022fbab4043a370f34f3ff59ee, type: 3}
   _spawnRate: 15
 --- !u!1001 &1960695168
 PrefabInstance:

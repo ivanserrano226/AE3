@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 public enum EnemyState { Spawned, Chasing, Attacking, Dead }
 
-public abstract class Enemy : Entity
+public class Enemy : Entity
 {
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private AudioSource _audioSource;
@@ -65,7 +65,7 @@ public abstract class Enemy : Entity
         _animator.SetTrigger("attack");
         
         yield return new WaitForSeconds(0.5f); // Wait for animation to reach damage frame
-        _player.GetComponent<Entity>().TakeDamage(10);
+        _player.GetComponent<Entity>().TakeDamage(Damage);
 
         yield return new WaitForSeconds(1f); // Attack cooldown
         isAttacking = false;
