@@ -127,7 +127,7 @@ public class PlayerController : Entity
 
     protected override void Die()
     {
-        SceneManager.LoadScene(1);
+       GameManager.Instance.OnGameOver(GameOverStatus.Defeat);
     }
 
 }

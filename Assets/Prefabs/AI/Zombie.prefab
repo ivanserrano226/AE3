@@ -835,7 +835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _maxHealth: 100
-  _damage: 30
+  _damage: 15
   _agent: {fileID: 8600774557774407054}
   _audioSource: {fileID: 8301042970570503838}
   _animator: {fileID: 7625076449385279912}

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public enum GameState { Ready, Game, Victory, Defeat }
+public enum GameOverStatus {Victory, Defeat}
 public class GameManager : MonoBehaviour
 {
     public static bool isPaused = false;
@@ -17,8 +18,9 @@ public class GameManager : MonoBehaviour
     public AudioClip ShootSound => _shootSound;
     public GameState CurrentGameState { get; private set; }
     public int EnemyCount { get; private set; }
-    public event Action OnCountdownFinished;
+    public event Action OnCountdownFinishedEvent;
     public event Action OnEnemyKilledEvent;
+    public event Action<GameOverStatus> OnGameOverEvent;
 
     private void Awake()
     {
@@ -57,7 +59,7 @@ public class GameManager : MonoBehaviour
         }
         if (_timeRemaining <= 0)
         {
-            OnCountdownFinished?.Invoke();
+            OnCountdownFinishedEvent?.Invoke();
             ChangeSong(_bossMusic);
         }
     }
@@ -119,5 +121,12 @@ public class GameManager : MonoBehaviour
     {
         EnemyCount++;
         OnEnemyKilledEvent?.Invoke();
+    }
+
+    public void OnGameOver(GameOverStatus gameOverStatus)
+    {
+        OnGameOverEvent?.Invoke(gameOverStatus);
+        PauseGame();
+        Cursor.lockState = CursorLockMode.None;
     }
 }

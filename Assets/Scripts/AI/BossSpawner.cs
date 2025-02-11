@@ -4,11 +4,11 @@ public class BossSpawner : Spawner
 {
     void Start()
     {
-        GameManager.Instance.OnCountdownFinished += Spawn;
+        GameManager.Instance.OnCountdownFinishedEvent += Spawn;
     }
 
     void OnDisable()
     {
-        GameManager.Instance.OnCountdownFinished -= Spawn;
+        GameManager.Instance.OnCountdownFinishedEvent -= Spawn;
     }
 }
