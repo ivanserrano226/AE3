@@ -6,7 +6,6 @@ public enum GameState { Game, Victory, Defeat }
 public enum GameOverStatus {Victory, Defeat}
 public class GameManager : MonoBehaviour
 {
-    public GameObject pauseMenuUI;
     public static GameManager Instance { get; private set; }
     private PlayerController _player;
     [SerializeField] private AudioClip _shootSound;
